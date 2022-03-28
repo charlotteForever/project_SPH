@@ -56,6 +56,7 @@ export default {
   name: "Header",
   methods: {
     goSearch() {
+      // 编程式路由导航，点击搜索按钮，跳转到search
       this.$router.push("/search");
     },
   },
