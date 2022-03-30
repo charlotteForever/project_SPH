@@ -2,7 +2,8 @@
   <div>
     <Header />
     <router-view></router-view>
-    <Footer />
+    <!-- 设置footer组件条件渲染 -->
+    <Footer v-show="$route.meta.show" />
   </div>
 </template>
 

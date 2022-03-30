@@ -37,6 +37,7 @@
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
+            v-model="keyword"
           />
           <button
             class="sui-btn btn-xlarge btn-danger"
@@ -54,10 +55,28 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      keyword: "",
+    };
+  },
   methods: {
     goSearch() {
       // 编程式路由导航，点击搜索按钮，跳转到search
-      this.$router.push("/search");
+      // 后面跟随params形式和query类型的参数
+      //   this.$router.push(
+      //   `/search${this.keyword}?keyword=${this.keyword.toUpperCase()}`
+      // );
+
+      // 在配置路由时，添加了占位符，但是实际传递的时候没有传params，则跳转时URL会出问题
+      // 如果要解决这个问题，需要在路由配置后面加上？
+
+      // 配置了？但是传递空串('')的时候会导致URL出问题？使用undefined解决
+      this.$router.push({
+        name: "search",
+        params: { keyword: "" || undefined },
+        query: { keyword: this.keyword.toUpperCase() },
+      });
     },
   },
 };

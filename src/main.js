@@ -4,6 +4,11 @@ import App from './App.vue'
 import router from './router'
 // import VueRouter from 'vue-router'
 
+// 全局引入三级联动 TypeNav组件,
+import TypeNav from './pages/Home/TypeNav/index.vue'
+// 第一个参数是组件的名字,第二个参数是哪一个组件
+Vue.component(TypeNav.name, TypeNav)
+
 Vue.config.productionTip = false
 // Vue.use(router)
 new Vue({
