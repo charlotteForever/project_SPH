@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Vue from 'vue'
 import App from './App.vue'
 
@@ -5,12 +6,11 @@ import router from './router'
 import store from '@/store'
 
 // 全局引入三级联动 TypeNav组件,
-import TypeNav from './pages/Home/TypeNav/index.vue'
+import TypeNav from './components/TypeNav/index.vue'
 // 第一个参数是组件的名字,第二个参数是哪一个组件
 Vue.component(TypeNav.name, TypeNav)
 
 import { reqCategoryList } from './api'
-reqCategoryList()
 
 
 Vue.config.productionTip = false

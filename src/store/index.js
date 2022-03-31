@@ -2,12 +2,12 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
 
-import home from './home'
-import search from './search'
+import homeOptions from './home'
+import searchOptions from './search'
 
-export const store = new Vuex({
+export default new Vuex.Store({
     modules: {
-        home,
-        search
+        homeOptions,
+        searchOptions
     }
 })

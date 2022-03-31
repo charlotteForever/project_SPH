@@ -7,7 +7,7 @@ const mutations = {
 const actions = {
 
 }
-export {
+export default {
     state,
     mutations,
     actions
