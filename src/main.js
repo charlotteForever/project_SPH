@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import router from './router'
+import store from '@/store'
 
 // 全局引入三级联动 TypeNav组件,
 import TypeNav from './pages/Home/TypeNav/index.vue'
@@ -9,7 +10,7 @@ import TypeNav from './pages/Home/TypeNav/index.vue'
 Vue.component(TypeNav.name, TypeNav)
 
 import { reqCategoryList } from './api'
-console.log(reqCategoryList())
+reqCategoryList()
 
 
 Vue.config.productionTip = false
@@ -18,4 +19,6 @@ new Vue({
   render: h => h(App),
   // 书写了之后，组件（无论是路由组件还是非路由组件）身上都有$route和$router属性
   router,
+  // 书写了之后，组件的身上出现了$store属性
+  store
 }).$mount('#app')
