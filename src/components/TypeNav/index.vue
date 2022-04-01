@@ -2,7 +2,47 @@
   <!-- 商品分类导航 -->
   <div class="type-nav">
     <div class="container">
-      <h2 class="all">全部商品分类</h2>
+      <!-- 把全部商品分类和下面的列表放在一个父盒子里，利用事件委派使得：
+      鼠标从index为0的标签上移动到，本该index为-1的在“全部商品分类”时，mouseleave不触发 -->
+
+      <div @mouseleave="handleLeave">
+        <h2 class="all">全部商品分类</h2>
+        <div class="sort">
+          <div class="all-sort-list2">
+            <!-- 动态确定样式 -->
+            <div
+              class="item bo"
+              v-for="(c1, index) in categoryList"
+              :key="c1.categoryId"
+              @mouseenter="handleEnter(index)"
+              :class="{ cur: curIndex === index }"
+            >
+              <h3>
+                <a href="">{{ c1.categoryName }}--{{ index }}</a>
+              </h3>
+              <div class="item-list clearfix">
+                <div class="subitem">
+                  <!-- c2有效的作用域要包含c3，因为c3依靠c2而存在 -->
+                  <dl
+                    class="fore"
+                    v-for="c2 in c1.categoryChild"
+                    :key="c2.categoryId"
+                  >
+                    <dt>
+                      <a href="">{{ c2.categoryName }}</a>
+                    </dt>
+                    <dd>
+                      <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                        <a href="">{{ c3.categoryName }}</a>
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <nav class="nav">
         <a href="###">服装城</a>
         <a href="###">美妆馆</a>
@@ -13,34 +53,6 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
-      <div class="sort">
-        <div class="all-sort-list2">
-          <div class="item bo" v-for="c1 in categoryList" :key="c1.categoryId">
-            <h3>
-              <a href="">{{ c1.categoryName }}</a>
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem">
-                <!-- c2有效的作用域要包含c3，因为c3依靠c2而存在 -->
-                <dl
-                  class="fore"
-                  v-for="c2 in c1.categoryChild"
-                  :key="c2.categoryId"
-                >
-                  <dt>
-                    <a href="">{{ c2.categoryName }}</a>
-                  </dt>
-                  <dd>
-                    <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
-                      <a href="">{{ c3.categoryName }}</a>
-                    </em>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -50,7 +62,19 @@ import { mapState } from "vuex";
 export default {
   name: "TypeNav",
   data() {
-    return {};
+    return {
+      curIndex: -1,
+    };
+  },
+  methods: {
+    // 鼠标在上，记录下index到curIndex，如果相等，类名改为curStyle
+    handleEnter(index) {
+      this.curIndex = index;
+    },
+    handleLeave() {
+      // curIndex置为-1，使动态的class样式失效
+      this.curIndex = -1;
+    },
   },
 
   mounted() {
@@ -65,8 +89,6 @@ export default {
       },
     }),
   },
-
-  methods: {},
 };
 </script>
 
@@ -188,6 +210,10 @@ export default {
         }
       }
     }
+  }
+
+  .cur {
+    background-color: skyblue;
   }
 }
 </style>
