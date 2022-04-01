@@ -4,7 +4,6 @@
     <div class="container">
       <!-- 把全部商品分类和下面的列表放在一个父盒子里，利用事件委派使得：
       鼠标从index为0的标签上移动到，本该index为-1的在“全部商品分类”时，mouseleave不触发 -->
-
       <div @mouseleave="handleLeave">
         <h2 class="all">全部商品分类</h2>
         <div class="sort">
@@ -59,6 +58,7 @@
 
 <script>
 import { mapState } from "vuex";
+import throttle from "lodash/throttle";
 export default {
   name: "TypeNav",
   data() {
@@ -68,9 +68,14 @@ export default {
   },
   methods: {
     // 鼠标在上，记录下index到curIndex，如果相等，类名改为curStyle
-    handleEnter(index) {
+    // handleEnter(index) {
+    //   this.curIndex = index;
+    //   console.log(index);
+    // },
+    handleEnter: throttle(function (index) {
       this.curIndex = index;
-    },
+      console.log(index);
+    }, 50),
     handleLeave() {
       // curIndex置为-1，使动态的class样式失效
       this.curIndex = -1;
