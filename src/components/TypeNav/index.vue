@@ -4,7 +4,7 @@
     <div class="container">
       <!-- 把全部商品分类和下面的列表放在一个父盒子里，利用事件委派使得：
       鼠标从index为0的标签上移动到，本该index为-1的在“全部商品分类”时，mouseleave不触发 -->
-      <div @mouseleave="handleLeave">
+      <div @mouseleave="handleLeave" @click="goSearch">
         <h2 class="all">全部商品分类</h2>
         <div class="sort">
           <div class="all-sort-list2">
@@ -17,8 +17,11 @@
               :class="{ cur: curIndex === index }"
             >
               <h3>
-                <!-- <a href="">{{ c1.categoryName }}--{{ index }}</a> -->
-                <router-link to="/search">{{ c1.categoryName }}</router-link>
+                <a
+                  :data-categoryName="c1.categoryName"
+                  :data-category1Id="c1.categoryId"
+                  >{{ c1.categoryName }}</a
+                >
               </h3>
               <div class="item-list clearfix">
                 <div class="subitem">
@@ -29,11 +32,19 @@
                     :key="c2.categoryId"
                   >
                     <dt>
-                      <a href="">{{ c2.categoryName }}</a>
+                      <a
+                        :data-categoryName="c2.categoryName"
+                        :data-category2Id="c2.categoryId"
+                        >{{ c2.categoryName }}</a
+                      >
                     </dt>
                     <dd>
                       <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
-                        <a href="">{{ c3.categoryName }}</a>
+                        <a
+                          :data-categoryName="c3.categoryName"
+                          :data-category3Id="c3.categoryId"
+                          >{{ c3.categoryName }}</a
+                        >
                       </em>
                     </dd>
                   </dl>
@@ -69,17 +80,38 @@ export default {
   },
   methods: {
     // 鼠标在上，记录下index到curIndex，如果相等，类名改为curStyle
-    // handleEnter(index) {
-    //   this.curIndex = index;
-    //   console.log(index);
-    // },
     handleEnter: throttle(function (index) {
       this.curIndex = index;
-      console.log(index);
     }, 50),
     handleLeave() {
       // curIndex置为-1，使动态的class样式失效
       this.curIndex = -1;
+    },
+
+    goSearch(event) {
+      // 最好解决路由跳转的方式：
+      // 1.编程式（因为router-link是一个组件，耗内存）
+      // 2.事件委托（不想给每个标签都定制一个特定的回调函数）
+      const el = event.target;
+      // 问题：如何保证点击到a标签的时候才进行路由跳转？如何知道自己拿到的是第几级a标签？如何拿到对应的参数
+      // 1.给a标签添加自定义属性categoryName，有这个属性才进行接下来的操作
+      // 2.给a标签添加自定义属性，属性为category1Id,值为c1.categoryId
+      const { categoryname, category1id, category2id, category3id } =
+        el.dataset;
+      let location = { name: "search" };
+      let query = {};
+      if (categoryname) {
+        if (category1id) {
+          query.category1Id = category1id;
+        } else if (category2id) {
+          query.category2Id = category2id;
+        } else {
+          query.category3Id = category3id;
+        }
+        // 合并location和query
+        location.query = query;
+        this.$router.push(location);
+      }
     },
   },
 
