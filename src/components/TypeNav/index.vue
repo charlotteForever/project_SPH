@@ -17,7 +17,8 @@
               :class="{ cur: curIndex === index }"
             >
               <h3>
-                <a href="">{{ c1.categoryName }}--{{ index }}</a>
+                <!-- <a href="">{{ c1.categoryName }}--{{ index }}</a> -->
+                <router-link to="/search">{{ c1.categoryName }}</router-link>
               </h3>
               <div class="item-list clearfix">
                 <div class="subitem">
