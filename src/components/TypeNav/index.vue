@@ -4,55 +4,57 @@
     <div class="container">
       <!-- 把全部商品分类和下面的列表放在一个父盒子里，利用事件委派使得：
       鼠标从index为0的标签上移动到，本该index为-1的在“全部商品分类”时，mouseleave不触发 -->
-      <div @mouseleave="handleLeave" @click="goSearch">
+      <div @mouseleave="handleLeave" @click="goSearch" @mouseenter="changeShow">
         <h2 class="all">全部商品分类</h2>
-        <div class="sort">
-          <div class="all-sort-list2">
-            <!-- 动态确定样式 -->
-            <div
-              class="item bo"
-              v-for="(c1, index) in categoryList"
-              :key="c1.categoryId"
-              @mouseenter="handleEnter(index)"
-              :class="{ cur: curIndex === index }"
-            >
-              <h3>
-                <a
-                  :data-categoryName="c1.categoryName"
-                  :data-category1Id="c1.categoryId"
-                  >{{ c1.categoryName }}</a
-                >
-              </h3>
-              <div class="item-list clearfix">
-                <div class="subitem">
-                  <!-- c2有效的作用域要包含c3，因为c3依靠c2而存在 -->
-                  <dl
-                    class="fore"
-                    v-for="c2 in c1.categoryChild"
-                    :key="c2.categoryId"
+        <transition name="sort-animation">
+          <div class="sort" v-show="show">
+            <div class="all-sort-list2">
+              <!-- 动态确定样式 -->
+              <div
+                class="item bo"
+                v-for="(c1, index) in categoryList"
+                :key="c1.categoryId"
+                @mouseenter="handleEnter(index)"
+                :class="{ cur: curIndex === index }"
+              >
+                <h3>
+                  <a
+                    :data-categoryName="c1.categoryName"
+                    :data-category1Id="c1.categoryId"
+                    >{{ c1.categoryName }}</a
                   >
-                    <dt>
-                      <a
-                        :data-categoryName="c2.categoryName"
-                        :data-category2Id="c2.categoryId"
-                        >{{ c2.categoryName }}</a
-                      >
-                    </dt>
-                    <dd>
-                      <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                </h3>
+                <div class="item-list clearfix">
+                  <div class="subitem">
+                    <!-- c2有效的作用域要包含c3，因为c3依靠c2而存在 -->
+                    <dl
+                      class="fore"
+                      v-for="c2 in c1.categoryChild"
+                      :key="c2.categoryId"
+                    >
+                      <dt>
                         <a
-                          :data-categoryName="c3.categoryName"
-                          :data-category3Id="c3.categoryId"
-                          >{{ c3.categoryName }}</a
+                          :data-categoryName="c2.categoryName"
+                          :data-category2Id="c2.categoryId"
+                          >{{ c2.categoryName }}</a
                         >
-                      </em>
-                    </dd>
-                  </dl>
+                      </dt>
+                      <dd>
+                        <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                          <a
+                            :data-categoryName="c3.categoryName"
+                            :data-category3Id="c3.categoryId"
+                            >{{ c3.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -76,6 +78,7 @@ export default {
   data() {
     return {
       curIndex: -1,
+      show: true,
     };
   },
   methods: {
@@ -83,9 +86,20 @@ export default {
     handleEnter: throttle(function (index) {
       this.curIndex = index;
     }, 50),
+    // 修改curIndex来去喜爱
     handleLeave() {
       // curIndex置为-1，使动态的class样式失效
       this.curIndex = -1;
+      if (this.$route.path === "/search") {
+        this.show = false;
+      }
+    },
+
+    //在search组件中，进入后显示三级联动
+    changeShow() {
+      if (this.$route.path === "/search") {
+        this.show = true;
+      }
     },
 
     goSearch(event) {
@@ -99,8 +113,10 @@ export default {
       const { categoryname, category1id, category2id, category3id } =
         el.dataset;
       let location = { name: "search" };
+      // query中存储用户点的的category1Id和categoryName
       let query = {};
       if (categoryname) {
+        query.categoryName = categoryname;
         if (category1id) {
           query.category1Id = category1id;
         } else if (category2id) {
@@ -118,6 +134,10 @@ export default {
   mounted() {
     // template挂载完成之后，dispatch(这里不能向服务器发请求，业务操作在actions里面)
     this.$store.dispatch("getCategory");
+    // console.log(this.$route);
+    if (this.$route.path === "/search") {
+      this.show = false;
+    }
   },
   computed: {
     ...mapState({
@@ -247,6 +267,20 @@ export default {
           }
         }
       }
+    }
+
+    // 定义进入的初始状态
+    .sort-animation-enter {
+      height: 0;
+      transform: 0edg;
+    }
+    // 定义进入的最终状态
+    .sort-animation-enter-to {
+      height: 471px;
+    }
+    // 定义动画的时间和速率
+    .sort-animation-enter-active {
+      transition: all 0.2s linear;
     }
   }
 
