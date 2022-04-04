@@ -17,6 +17,10 @@ export default {
     Header,
     Footer,
   },
+  mounted() {
+    // 程序一运行起来就把数据存在仓库的categoryList里面
+    this.$store.dispatch("getCategory");
+  },
 };
 </script>
 

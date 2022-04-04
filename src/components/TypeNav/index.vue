@@ -133,7 +133,6 @@ export default {
 
   mounted() {
     // template挂载完成之后，dispatch(这里不能向服务器发请求，业务操作在actions里面)
-    this.$store.dispatch("getCategory");
     // console.log(this.$route);
     if (this.$route.path === "/search") {
       this.show = false;
