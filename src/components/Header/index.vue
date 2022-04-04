@@ -72,11 +72,13 @@ export default {
       // 如果要解决这个问题，需要在路由配置后面加上？
 
       // 配置了？但是传递空串('')的时候会导致URL出问题？使用undefined解决
-      this.$router.push({
+      let location = {
         name: "search",
-        params: { keyword: "" || undefined },
-        query: { keyword: this.keyword.toUpperCase() },
-      });
+        params: { keyword: this.keyword || undefined },
+      };
+      // 把当前的query参数合并到参数列表中，然后进行路由跳转
+      location.query = this.$route.query;
+      this.$router.push(location);
     },
   },
 };

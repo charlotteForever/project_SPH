@@ -126,6 +126,7 @@ export default {
         }
         // 合并location和query
         location.query = query;
+        location.params = this.$route.params;
         this.$router.push(location);
       }
     },
