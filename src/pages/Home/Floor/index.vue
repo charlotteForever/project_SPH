@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Floor",
 
@@ -102,8 +103,14 @@ export default {
     return {};
   },
 
-  mounted() {},
-
+  created() {
+    this.$store.dispatch("getFloor");
+  },
+  computed: {
+    ...mapState({
+      floorList: (state) => state.homeOptions.floorList,
+    }),
+  },
   methods: {},
 };
 </script>

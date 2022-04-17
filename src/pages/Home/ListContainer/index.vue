@@ -101,15 +101,22 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "ListContainer",
-
-  data() {
-    return {};
+  created() {
+    this.$store.dispatch("getBanner");
   },
-
-  mounted() {},
-
+  // mounted() {
+  //   this.$store.dispatch("getBanner");
+  // },
+  computed: {
+    ...mapState({
+      bannerList: (state) => {
+        return state.homeOptions.bannerList;
+      },
+    }),
+  },
   methods: {},
 };
 </script>

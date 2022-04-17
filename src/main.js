@@ -10,8 +10,8 @@ import TypeNav from './components/TypeNav/index.vue'
 // 第一个参数是组件的名字,第二个参数是哪一个组件
 Vue.component(TypeNav.name, TypeNav)
 
-import { reqCategoryList } from './api'
-
+// 至少得引入了执行一次
+import '@/mock/mockServe'
 
 Vue.config.productionTip = false
 // Vue.use(router)
