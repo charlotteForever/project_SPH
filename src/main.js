@@ -13,6 +13,9 @@ Vue.component(TypeNav.name, TypeNav)
 // 至少得引入了执行一次
 import '@/mock/mockServe'
 
+// 引入swiper的样式
+import 'swiper/css/swiper.css'
+
 Vue.config.productionTip = false
 // Vue.use(router)
 new Vue({

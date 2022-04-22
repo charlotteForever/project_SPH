@@ -12,6 +12,7 @@ const mutations = {
         state.categoryList = value.slice(0, 16)
     },
     GETBANNER(state, value) {
+        console.log('得到banner数据，存入仓库')
         state.bannerList = value
     },
     GETFLOOR(state, value) {
